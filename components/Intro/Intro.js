@@ -68,7 +68,7 @@ const Intro = (): Node => {
         backgroundColor: isDarkMode ? Colors.black : Colors.white,
         }}>
         <Section title="Choose a language to learn">
-        Select the language you would like to learn while read in.
+        Select the language you would like to learn while reading.
         </Section>
         <Section title="Choose reference language">
         Select the language you would like to use for translation.
