@@ -34,6 +34,7 @@ RCT_EXPORT_METHOD(getVerse:(NSInteger)chapterId verseNumber:(NSInteger)verseNumb
     if (sqlite3_open([databasePathFromApp UTF8String], &database) != SQLITE_OK) {
       RCTLogInfo(@"Couldn't open %s", [databasePathFromApp UTF8String]);
       reject(@"db error", @"Error opening database", nil);
+      return;
     }
   }
   
@@ -42,6 +43,7 @@ RCT_EXPORT_METHOD(getVerse:(NSInteger)chapterId verseNumber:(NSInteger)verseNumb
   if (sqlite3_prepare_v2(database, [sql UTF8String], -1, &stmt , NULL) != SQLITE_OK) {
     RCTLogInfo(@"Error: failed to prepare query statement with message '%s'.", sqlite3_errmsg(database));
     reject(@"db error", @"Error querying database", nil);
+    return;
   }
   
   NSMutableString *verseText = nil;

@@ -70,7 +70,7 @@ const Intro = (): Node => {
         <Section title="Choose a language to learn">
         Select the language you would like to learn while reading.
         </Section>
-        <Section title="Choose reference language">
+        <Section title="Choose a reference language">
         Select the language you would like to use for translation.
         </Section>
         <Button
