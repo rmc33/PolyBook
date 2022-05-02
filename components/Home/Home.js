@@ -82,7 +82,7 @@ const Home = (): Node => {
           <Button
             title="Select the language you would like to use for translation."
             color="#841584"
-            onPress={()=>setLanguageModalVisible(false)}
+            onPress={()=>setLanguageModalVisible(true)}
           />
         </Section>
         <View
