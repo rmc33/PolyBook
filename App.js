@@ -27,12 +27,11 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import Intro from './components/Intro/Intro';
+import Home from './components/Home/Home';
 
 
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
-
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
@@ -42,7 +41,7 @@ const App: () => Node = () => {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Intro/>
+        <Home/>
       </ScrollView>
     </SafeAreaView>
   );

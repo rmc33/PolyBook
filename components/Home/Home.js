@@ -6,12 +6,14 @@
  */
 
 import type {Node} from 'react';
-import {StyleSheet, Text, useColorScheme} from 'react-native';
+import { StyleSheet, Text, useColorScheme}  from 'react-native';
 import React from 'react';
+import { useState } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { View  } from 'react-native';
 
 import { NativeModules, Button } from 'react-native';
+import LanguagePicker from '../../components/LanguagePicker/LanguagePicker';
 
 const { SqlLiteModule } = NativeModules;
 
@@ -60,24 +62,41 @@ const styles = StyleSheet.create({
     );
   };
 
-const Intro = (): Node => {
+const Home = (): Node => {
   const isDarkMode = useColorScheme() === 'dark';
+  const [languageModalVisible, setLanguageModalVisible] = useState(false);
   return (
     <View
         style={{
         backgroundColor: isDarkMode ? Colors.black : Colors.white,
         }}>
+         <LanguagePicker visible={languageModalVisible} onClose={()=>setLanguageModalVisible(false)}/>
         <Section title="Choose a language to learn">
-        Select the language you would like to learn while reading.
+          <Button
+            title="Select the language you would like to learn while reading."
+            color="#841584"
+            onPress={()=>setLanguageModalVisible(true)}
+          />
         </Section>
         <Section title="Choose a reference language">
-        Select the language you would like to use for translation.
-        </Section>
-        <Button
-            title="Click to invoke your native module!"
+          <Button
+            title="Select the language you would like to use for translation."
             color="#841584"
-            onPress={getVerse}
-        />
+            onPress={()=>setLanguageModalVisible(false)}
+          />
+        </Section>
+        <View
+          style={{
+            backgroundColor: '#0b6efd',
+            marginLeft: 20,
+            marginRight: 20,
+            marginTop: 80
+          }}>
+        <Button
+          title="Next"
+          color="#fff"
+          onPress={getVerse}/>
+        </View>
     </View>
   );
 };
@@ -89,6 +108,6 @@ const getVerse = async () => {
     } catch (e) {
       console.error(e);
     }
-  };
+};
 
-export default Intro;
+export default Home;
