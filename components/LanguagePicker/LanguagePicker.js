@@ -60,8 +60,10 @@ const LanguagePicker  = ({ visible, onClose }: Props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const languages = await SqlLiteModule.getLanguages();
-        visible && setAllLang(languages);
+        if (visible && allLang.length == 0) {
+          const languages = await SqlLiteModule.getLanguages();
+          setAllLang(languages);
+        }
       }
       catch(e) {
         console.log('error', e);
@@ -84,7 +86,7 @@ const LanguagePicker  = ({ visible, onClose }: Props) => {
             />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic">
-                {visible && allLang && allLang.map((langCode)=>{
+                {allLang && allLang.map((langCode)=>{
                   return (
                     <Item key={langCode} title={langCode}/>
                   )
