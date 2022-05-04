@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
 const Home = (): Node => {
   const isDarkMode = useColorScheme() === 'dark';
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
+  
   return (
     <View
         style={{
