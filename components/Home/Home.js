@@ -12,8 +12,9 @@ import { useState } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { View  } from 'react-native';
 
-import { NativeModules, Button } from 'react-native';
+import { NativeModules, Button, TouchableOpacity } from 'react-native';
 import LanguagePicker from '../../components/LanguagePicker/LanguagePicker';
+import SelectedLanguage from '../../components/SelectedLanguage/SelectedLanguage';
 
 const { SqlLiteModule } = NativeModules;
 
@@ -27,13 +28,35 @@ const styles = StyleSheet.create({
       fontWeight: '600',
     },
     sectionDescription: {
-      marginTop: 8,
-      fontSize: 18,
-      fontWeight: '400',
+      marginTop: 8
     },
     highlight: {
       fontWeight: '700',
     },
+    container: {
+      marginTop: 34,
+      flex: 1,
+      alignItems: 'center'
+    },
+    customBtnText: {
+      fontSize: 20,
+      fontWeight: '500',
+      color: "#fff"
+    },
+    customBtnBG: {
+      backgroundColor: "#0b6efd",
+      paddingHorizontal: 5,
+      paddingVertical: 5,
+      width: '80%',
+      flex: 1,
+      alignItems: 'center'
+    },
+    linkBtn: {
+      color: '#841584'
+    },
+    linkBtnContainer: {
+      marginTop: 0
+    }
   });
 
   const Section = ({children, title}): Node => {
@@ -49,7 +72,7 @@ const styles = StyleSheet.create({
           ]}>
           {title}
         </Text>
-        <Text
+        <View
           style={[
             styles.sectionDescription,
             {
@@ -57,7 +80,7 @@ const styles = StyleSheet.create({
             },
           ]}>
           {children}
-        </Text>
+        </View>
       </View>
     );
   };
@@ -72,32 +95,33 @@ const Home = (): Node => {
         }}>
          <LanguagePicker visible={languageModalVisible} onClose={()=>setLanguageModalVisible(false)}/>
         <Section title="Choose a language to learn">
-          <Button
-            title="Select the language you would like to learn while reading."
-            color="#841584"
-            onPress={()=>setLanguageModalVisible(true)}
-          />
+          <ChooseLang title="Select the language you would like to learn while reading." 
+            languageCode="EN"
+            onPress={()=>setLanguageModalVisible(true)}/>
         </Section>
         <Section title="Choose a reference language">
-          <Button
-            title="Select the language you would like to use for translation."
-            color="#841584"
-            onPress={()=>setLanguageModalVisible(true)}
-          />
+          <ChooseLang title="Select the language you would like to use for translation." 
+            languageCode="EN"
+            onPress={()=>setLanguageModalVisible(true)}/>
         </Section>
-        <View
-          style={{
-            backgroundColor: '#0b6efd',
-            marginLeft: 20,
-            marginRight: 20,
-            marginTop: 80
-          }}>
-        <Button
-          title="Next"
-          color="#fff"
-          onPress={getVerse}/>
+        <View style={styles.container}>
+          <TouchableOpacity
+            style={styles.customBtnBG}
+            onPress={getVerse} 
+          >
+            <Text style={styles.customBtnText}>Next</Text>
+          </TouchableOpacity>
         </View>
     </View>
+  );
+};
+
+const ChooseLang = ({title, languageCode, onPress}): Node => {
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <Text style={styles.linkBtn}>{title}</Text>
+      <SelectedLanguage languageCode={languageCode} fontSize={20}/>
+    </TouchableOpacity>
   );
 };
 
