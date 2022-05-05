@@ -88,22 +88,34 @@ const styles = StyleSheet.create({
 const Home = (): Node => {
   const isDarkMode = useColorScheme() === 'dark';
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
-  
+  const [selectedLang, setSelectedLang] = useState({learn: 'EN', reference: 'EN'});
+  const [activeLang, setActiveLang] = useState('');
+
+  const handleChooseLang = (activeLang) => {
+    setLanguageModalVisible(true);
+    setActiveLang(activeLang);
+  };
+
+  const onSelectLang = (langCode) => {
+    setLanguageModalVisible(false);
+    setSelectedLang(Object.assign(selectedLang, {[activeLang] : langCode}));
+  };
+
   return (
     <View
         style={{
         backgroundColor: isDarkMode ? Colors.black : Colors.white,
         }}>
-         <LanguagePicker visible={languageModalVisible} onClose={()=>setLanguageModalVisible(false)}/>
+         <LanguagePicker visible={languageModalVisible} onClose={()=>setLanguageModalVisible(false)} onSelect={onSelectLang}/>
         <Section title="Choose a language to learn">
           <ChooseLang title="Select the language you would like to learn while reading." 
-            languageCode="EN"
-            onPress={()=>setLanguageModalVisible(true)}/>
+            languageCode={selectedLang.learn}
+            onPress={() => handleChooseLang('learn')}/>
         </Section>
         <Section title="Choose a reference language">
           <ChooseLang title="Select the language you would like to use for translation." 
-            languageCode="EN"
-            onPress={()=>setLanguageModalVisible(true)}/>
+            languageCode={selectedLang.reference}
+            onPress={() => handleChooseLang('reference')}/>
         </Section>
         <View style={styles.container}>
           <TouchableOpacity

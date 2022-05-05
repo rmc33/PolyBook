@@ -4,7 +4,8 @@ import React from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 interface Props {
-    languageName?: string;
+    languageCode?: string;
+    fontSize?: number;
 }
 
 const emojiMap = {
@@ -15,7 +16,7 @@ const emojiMap = {
 
 const getEmoji = (languageCode: string): string => {
     return emojiMap[languageCode];
-}
+};
 
 const SelectedLanguage = ({ languageCode, fontSize }: Props) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -26,7 +27,7 @@ const SelectedLanguage = ({ languageCode, fontSize }: Props) => {
           }]}
         allowFontScaling={false}
         >
-        <Text allowFontScaling={false}>{getEmoji(languageCode)}</Text>
+        {getEmoji(languageCode)}
     </Text>
   );
 };

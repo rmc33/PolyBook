@@ -9,37 +9,36 @@ import type {Node} from 'react';
 import {StyleSheet, Text, useColorScheme, Dimensions} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { View, ScrollView  } from 'react-native';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 import AnimatedModal from '../../components/AnimatedModal/AnimatedModal';
 import { NativeModules, Button } from 'react-native';
+import SelectedLanguage from '../../components/SelectedLanguage/SelectedLanguage';
 
 const { height } = Dimensions.get('window')
 
 const { SqlLiteModule } = NativeModules;
 
-interface Props {
-    visible?: boolean
-}
-
 const styles = StyleSheet.create({
-    sectionContainer: {
-      marginTop: 32,
-      paddingHorizontal: 24,
+    sectionTitle: {
+      marginLeft: 10
     },
     item: {
       fontSize: 16,
       fontWeight: '300',
       paddingTop: 12,
       paddingBottom: 12,
-      borderBottom: '2px solid',
-      borderTop: '2px solid'
+      borderBottomWidth: 1,
+      marginLeft: 10,
+      display: 'flex',
+      flexDirection: 'row'
     }
   });
 
-  const Item = ({ title }): Node => {
+  const Item = ({ title, onSelect }): Node => {
     const isDarkMode = useColorScheme() === 'dark';
     return (
-      <View style={styles.item}>
+      <TouchableOpacity style={styles.item} onPress={() => onSelect(title)}>
+        <SelectedLanguage languageCode={title} fontSize={20}/>
         <Text
           style={[
             styles.sectionTitle,
@@ -49,11 +48,11 @@ const styles = StyleSheet.create({
           ]}>
           {title}
         </Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 
-const LanguagePicker  = ({ visible, onClose }: Props) => {
+const LanguagePicker  = ({ visible, onClose, onSelect }): Node => {
   const isDarkMode = useColorScheme() === 'dark';
   const [allLang, setAllLang] = useState([]);
 
@@ -66,7 +65,7 @@ const LanguagePicker  = ({ visible, onClose }: Props) => {
         }
       }
       catch(e) {
-        console.log('error', e);
+        console.log('LanguagePicker error', e);
       }
     }
     fetchData();
@@ -88,7 +87,7 @@ const LanguagePicker  = ({ visible, onClose }: Props) => {
                 contentInsetAdjustmentBehavior="automatic">
                 {allLang && allLang.map((langCode)=>{
                   return (
-                    <Item key={langCode} title={langCode}/>
+                    <Item key={langCode} title={langCode} onSelect={onSelect}/>
                   )
                 })}
             </ScrollView>
