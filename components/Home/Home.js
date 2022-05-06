@@ -90,10 +90,23 @@ const Home = (): Node => {
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
   const [selectedLang, setSelectedLang] = useState({learn: 'EN', reference: 'EN'});
   const [activeLang, setActiveLang] = useState('');
+  const [allLanguages, setAllLanguages] = useState([]);
 
   const handleChooseLang = (activeLang) => {
     setLanguageModalVisible(true);
     setActiveLang(activeLang);
+    const fetchData = async () => {
+      try {
+        if (allLanguages.length == 0) {
+          const languages = await SqlLiteModule.getLanguages();
+          setAllLanguages(languages);
+        }
+      }
+      catch(e) {
+        console.log('LanguagePicker error', e);
+      }
+    }
+    fetchData();
   };
 
   const onSelectLang = (langCode) => {
@@ -106,7 +119,7 @@ const Home = (): Node => {
         style={{
         backgroundColor: isDarkMode ? Colors.black : Colors.white,
         }}>
-         <LanguagePicker visible={languageModalVisible} onClose={()=>setLanguageModalVisible(false)} onSelect={onSelectLang}/>
+        <LanguagePicker visible={languageModalVisible} allLanguages={allLanguages} onClose={()=>setLanguageModalVisible(false)} onSelect={onSelectLang}/>
         <Section title="Choose a language to learn">
           <ChooseLang title="Select the language you would like to learn while reading." 
             languageCode={selectedLang.learn}

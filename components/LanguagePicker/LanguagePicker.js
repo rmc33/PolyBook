@@ -52,24 +52,8 @@ const styles = StyleSheet.create({
     );
   };
 
-const LanguagePicker  = ({ visible, onClose, onSelect }): Node => {
+const LanguagePicker  = ({ visible, onClose, onSelect, allLanguages }): Node => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [allLang, setAllLang] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (visible && allLang.length == 0) {
-          const languages = await SqlLiteModule.getLanguages();
-          setAllLang(languages);
-        }
-      }
-      catch(e) {
-        console.log('LanguagePicker error', e);
-      }
-    }
-    fetchData();
-  }, [visible]);
 
   return (
       <AnimatedModal visible={visible}>
@@ -85,7 +69,7 @@ const LanguagePicker  = ({ visible, onClose, onSelect }): Node => {
             />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic">
-                {allLang && allLang.map((langCode)=>{
+                {allLanguages && allLanguages.map((langCode)=>{
                   return (
                     <Item key={langCode} title={langCode} onSelect={onSelect}/>
                   )
