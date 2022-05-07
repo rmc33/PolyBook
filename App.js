@@ -10,6 +10,7 @@ import React from 'react';
 import type {Node} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import Home from './components/Home/Home';
+import Story from './components/Story/Story';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
@@ -19,7 +20,8 @@ const App: () => Node = () => {
   return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Getting Started">
-          <Stack.Screen name="Getting Started" component={Home} />
+          <Stack.Screen name="Getting Started" component={Home} options={{headerShown:true}}/>
+          <Stack.Screen name="Story" component={Story} options={{headerShown:false}}/>
         </Stack.Navigator>
       </NavigationContainer>
   );

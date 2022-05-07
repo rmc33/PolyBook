@@ -7,7 +7,7 @@
 
 import type {Node} from 'react';
 import { StyleSheet, Text, useColorScheme, SafeAreaView,
-  ScrollView, View}  from 'react-native';
+  ScrollView, View, Dimensions}  from 'react-native';
 import React from 'react';
 import { useState } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
@@ -15,6 +15,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { NativeModules, Button, TouchableOpacity } from 'react-native';
 import LanguagePicker from '../../components/LanguagePicker/LanguagePicker';
 import SelectedLanguage from '../../components/SelectedLanguage/SelectedLanguage';
+import NavigationButton from '../../components/NavigationButton/NavigationButton';
 
 const { SqlLiteModule } = NativeModules;
 
@@ -30,32 +31,8 @@ const styles = StyleSheet.create({
     sectionDescription: {
       marginTop: 8
     },
-    highlight: {
-      fontWeight: '700',
-    },
-    container: {
-      marginTop: 34,
-      flex: 1,
-      alignItems: 'center'
-    },
-    customBtnText: {
-      fontSize: 20,
-      fontWeight: '500',
-      color: "#fff"
-    },
-    customBtnBG: {
-      backgroundColor: "#0b6efd",
-      paddingHorizontal: 5,
-      paddingVertical: 5,
-      width: '80%',
-      flex: 1,
-      alignItems: 'center'
-    },
     linkBtn: {
       color: '#414042'
-    },
-    linkBtnContainer: {
-      marginTop: 0
     }
   });
 
@@ -85,11 +62,12 @@ const styles = StyleSheet.create({
     );
   };
 
-const Home = (): Node => {
+const Home = ({navigation}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
+  const { height } = Dimensions.get('window');
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    height: '100%'
+    height: height
   };
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
   const [selectedLang, setSelectedLang] = useState({learn: 'EN', reference: 'EN'});
@@ -136,10 +114,10 @@ const Home = (): Node => {
               languageCode={selectedLang.reference}
               onPress={() => handleChooseLang('reference')}/>
           </Section>
-          <NavigationButton title="Next"/>
+          <NavigationButton title="Next" onPress={()=>navigation.navigate('Story', {selectedLang})}/>
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 };
 
 const ChooseLang = ({title, languageCode, onPress}): Node => {
@@ -149,28 +127,6 @@ const ChooseLang = ({title, languageCode, onPress}): Node => {
       <SelectedLanguage languageCode={languageCode} fontSize={20}/>
     </TouchableOpacity>
   );
-};
-
-const NavigationButton = ({title}): Node => {
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.customBtnBG}
-        onPress={getVerse} 
-      >
-        <Text style={styles.customBtnText}>{title}</Text>
-      </TouchableOpacity>
-    </View>
-  )
-};
-
-const getVerse = async () => {
-    try {
-      const verse = await SqlLiteModule.getVerse(14486,2);
-      console.log(`Created a new event with id ${verse}`);
-    } catch (e) {
-      console.error(e);
-    }
 };
 
 export default Home;
