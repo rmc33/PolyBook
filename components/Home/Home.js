@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
       alignItems: 'center'
     },
     linkBtn: {
-      color: '#841584'
+      color: '#414042'
     },
     linkBtnContainer: {
       marginTop: 0
@@ -89,6 +89,7 @@ const Home = (): Node => {
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    height: '100%'
   };
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
   const [selectedLang, setSelectedLang] = useState({learn: 'EN', reference: 'EN'});
@@ -122,7 +123,9 @@ const Home = (): Node => {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-          <LanguagePicker visible={languageModalVisible} allLanguages={allLanguages} onClose={()=>setLanguageModalVisible(false)} onSelect={onSelectLang}/>
+          { languageModalVisible && 
+            <LanguagePicker visible={languageModalVisible} allLanguages={allLanguages} onClose={()=>setLanguageModalVisible(false)} onSelect={onSelectLang}/> 
+          }
           <Section title="Choose a language to learn">
             <ChooseLang title="Select the language you would like to learn while reading." 
               languageCode={selectedLang.learn}
