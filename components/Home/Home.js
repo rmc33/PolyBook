@@ -6,11 +6,11 @@
  */
 
 import type {Node} from 'react';
-import { StyleSheet, Text, useColorScheme}  from 'react-native';
+import { StyleSheet, Text, useColorScheme, SafeAreaView,
+  ScrollView, View}  from 'react-native';
 import React from 'react';
 import { useState } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { View  } from 'react-native';
 
 import { NativeModules, Button, TouchableOpacity } from 'react-native';
 import LanguagePicker from '../../components/LanguagePicker/LanguagePicker';
@@ -87,6 +87,9 @@ const styles = StyleSheet.create({
 
 const Home = (): Node => {
   const isDarkMode = useColorScheme() === 'dark';
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  };
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
   const [selectedLang, setSelectedLang] = useState({learn: 'EN', reference: 'EN'});
   const [activeLang, setActiveLang] = useState('');
@@ -105,7 +108,7 @@ const Home = (): Node => {
       catch(e) {
         console.log('LanguagePicker error', e);
       }
-    }
+    };
     fetchData();
   };
 
@@ -115,30 +118,24 @@ const Home = (): Node => {
   };
 
   return (
-    <View
-        style={{
-        backgroundColor: isDarkMode ? Colors.black : Colors.white,
-        }}>
-        <LanguagePicker visible={languageModalVisible} allLanguages={allLanguages} onClose={()=>setLanguageModalVisible(false)} onSelect={onSelectLang}/>
-        <Section title="Choose a language to learn">
-          <ChooseLang title="Select the language you would like to learn while reading." 
-            languageCode={selectedLang.learn}
-            onPress={() => handleChooseLang('learn')}/>
-        </Section>
-        <Section title="Choose a reference language">
-          <ChooseLang title="Select the language you would like to use for translation." 
-            languageCode={selectedLang.reference}
-            onPress={() => handleChooseLang('reference')}/>
-        </Section>
-        <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.customBtnBG}
-            onPress={getVerse} 
-          >
-            <Text style={styles.customBtnText}>Next</Text>
-          </TouchableOpacity>
-        </View>
-    </View>
+    <SafeAreaView style={backgroundStyle}>
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        style={backgroundStyle}>
+          <LanguagePicker visible={languageModalVisible} allLanguages={allLanguages} onClose={()=>setLanguageModalVisible(false)} onSelect={onSelectLang}/>
+          <Section title="Choose a language to learn">
+            <ChooseLang title="Select the language you would like to learn while reading." 
+              languageCode={selectedLang.learn}
+              onPress={() => handleChooseLang('learn')}/>
+          </Section>
+          <Section title="Choose a reference language">
+            <ChooseLang title="Select the language you would like to use for translation." 
+              languageCode={selectedLang.reference}
+              onPress={() => handleChooseLang('reference')}/>
+          </Section>
+          <NavigationButton title="Next"/>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -149,6 +146,19 @@ const ChooseLang = ({title, languageCode, onPress}): Node => {
       <SelectedLanguage languageCode={languageCode} fontSize={20}/>
     </TouchableOpacity>
   );
+};
+
+const NavigationButton = ({title}): Node => {
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.customBtnBG}
+        onPress={getVerse} 
+      >
+        <Text style={styles.customBtnText}>{title}</Text>
+      </TouchableOpacity>
+    </View>
+  )
 };
 
 const getVerse = async () => {

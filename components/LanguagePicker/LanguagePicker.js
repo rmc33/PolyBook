@@ -7,16 +7,14 @@
 
 import type {Node} from 'react';
 import {StyleSheet, Text, useColorScheme, Dimensions} from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { View, ScrollView, TouchableOpacity } from 'react-native';
 import AnimatedModal from '../../components/AnimatedModal/AnimatedModal';
-import { NativeModules, Button } from 'react-native';
+import { Button } from 'react-native';
 import SelectedLanguage from '../../components/SelectedLanguage/SelectedLanguage';
 
 const { height } = Dimensions.get('window')
-
-const { SqlLiteModule } = NativeModules;
 
 const styles = StyleSheet.create({
     sectionTitle: {
