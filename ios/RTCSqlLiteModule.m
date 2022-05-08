@@ -18,7 +18,10 @@ RCT_EXPORT_MODULE();
 
 sqlite3 *database = NULL;
 
-RCT_EXPORT_METHOD(getVerse:(NSInteger)chapterId verseNumber:(NSInteger)verseNumber
+RCT_EXPORT_METHOD(getVerseByOrder:(NSString*) langCode
+                  bookNumber:(NSInteger)bookNumber
+                  chapterNumber:(NSInteger)chapterNumber
+                  verseNumber:(NSInteger)verseNumber
     resolver:(RCTPromiseResolveBlock)resolve
     rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -27,7 +30,7 @@ RCT_EXPORT_METHOD(getVerse:(NSInteger)chapterId verseNumber:(NSInteger)verseNumb
     reject(@"db error", @"Error opening database", nil);
   }
   
-  NSString *sql = [NSString stringWithFormat:@"select text from verse where chapter_id=%ld and number=%ld;", chapterId, verseNumber];
+  NSString *sql = [NSString stringWithFormat:@"select v.text from verse v, chapter c, book b, bible bb where bb.lang='%@' and b.bible_id = bb.id and c.book_id = b.id and v.chapter_id = c.id and v.number=%ld and c.number=%ld and b.number=%ld", langCode, verseNumber, chapterNumber, bookNumber];
   
   sqlite3_stmt *stmt = NULL;
   
@@ -49,7 +52,7 @@ RCT_EXPORT_METHOD(getVerse:(NSInteger)chapterId verseNumber:(NSInteger)verseNumb
   stmt = NULL;
   sqlite3_finalize(stmt);
   resolve(verseText);
-  RCTLogInfo(@"Completed query with arguments %ld at %ld with %d results", chapterId, verseNumber, row_count);
+  RCTLogInfo(@"Completed query with results %d", row_count);
 }
 
 RCT_EXPORT_METHOD(closeDB)

@@ -27,10 +27,13 @@ const styles = StyleSheet.create({
 const Story = ({navigation, route}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
   const colorStyle = { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter };
-  const [verse, setVerse] = useState('');
+  const [verseLearn, setVerseLearn] = useState('');
+  const [verseReference, setVerseReference] = useState('');
+  const [order, setOrder] = useState([1,1,1]);
   
   useEffect(() => {
-    getVerse().then(setVerse);
+    getVerse(route.params.selectedLang.learn).then(setVerseLearn);
+    getVerse(route.params.selectedLang.reference).then(setVerseReference);
   },[]);
 
   return (
@@ -39,17 +42,19 @@ const Story = ({navigation, route}): Node => {
         contentInsetAdjustmentBehavior="automatic"
         style={[styles.backgroundStyle, colorStyle]}>
             <Text>{route.params.selectedLang.learn}</Text>
-            <Text>{verse}</Text>
+            <Text>{verseLearn}</Text>
             <Text>{route.params.selectedLang.reference}</Text>
+            <Text>{verseReference}</Text>
+            <NavigationButton title="Next"/>
             <NavigationButton title="Back" onPress={()=>navigation.navigate('Getting Started')}/>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-const getVerse = async () => {
+const getVerse = async (langCode) => {
     try {
-      const verse = await SqlLiteModule.getVerse(14486,2);
+      const verse = await SqlLiteModule.getVerseByOrder(langCode, 1, 1, 1);
       console.log(`Created a new event with id ${verse}`);
       return verse;
     } catch (e) {

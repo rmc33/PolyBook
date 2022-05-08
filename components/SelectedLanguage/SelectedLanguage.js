@@ -11,7 +11,8 @@ interface Props {
 const emojiMap = {
     'EN': '🇬🇧',
     'HU': '🇭🇺',
-    'IT': '🇮🇹'
+    'IT': '🇮🇹',
+    'FR': '🇫🇷'
 };
 
 const getEmoji = (languageCode: string): string => {
