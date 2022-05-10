@@ -86,11 +86,9 @@ const getNextVerseOrder = async(langCodeLearn, langCodeRef, order) => {
         [bookNumber+1, 1, 1]
     ];
     for (let o of nextVerseOrders) {
-        try {
-            verses = await getVerses(langCodeLearn, langCodeRef, o);
-            if (verses && verses[langCodeLearn]) return { verses, order: o };
-        } catch (e) {
-            console.error('getNextVerseOrder:', e);
+        verses = await getVerses(langCodeLearn, langCodeRef, o);
+        if (verses && verses[langCodeLearn]) {
+            return { verses, order: o };
         }
     }
 };
