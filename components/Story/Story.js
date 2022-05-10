@@ -32,9 +32,23 @@ const Story = ({navigation, route}): Node => {
   const [order, setOrder] = useState([1,1,1]);
   
   useEffect(() => {
-    getVerse(route.params.selectedLang.learn).then(setVerseLearn);
-    getVerse(route.params.selectedLang.reference).then(setVerseReference);
+    getVerse(route.params.selectedLang.learn, order).then(setVerseLearn);
+    getVerse(route.params.selectedLang.reference, order).then(setVerseReference);
   },[]);
+
+  const handleGetNextVerse = () => {
+    getNextVerseOrder(route.params.selectedLang.learn, order).then((verseOrder) => {
+        setVerseLearn(verseOrder.verse);
+        setOrder(verseOrder.order);
+        return verseOrder;
+    }).then((verseOrder)=> {
+        return getVerse(route.params.selectedLang.reference, verseOrder.order);
+    }).then((verse) => {
+        setVerseReference(verse);
+    }).catch((error) => {
+        console.log('handleGetNextVerse:', error);
+    });
+  };
 
   return (
     <SafeAreaView style={styles.backgroundStyle}>
@@ -45,20 +59,39 @@ const Story = ({navigation, route}): Node => {
             <Text>{verseLearn}</Text>
             <Text>{route.params.selectedLang.reference}</Text>
             <Text>{verseReference}</Text>
-            <NavigationButton title="Next"/>
+            <NavigationButton title="Next" onPress={()=>handleGetNextVerse()}/>
             <NavigationButton title="Back" onPress={()=>navigation.navigate('Getting Started')}/>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-const getVerse = async (langCode) => {
+const getVerse = async (langCode, order) => {
     try {
-      const verse = await SqlLiteModule.getVerseByOrder(langCode, 1, 1, 1);
-      console.log(`Created a new event with id ${verse}`);
+      console.log('getVerse order=', ...order);
+      const verse = await SqlLiteModule.getVerseByOrder(langCode, ...order);
       return verse;
     } catch (e) {
       console.error(e);
+    }
+};
+
+const getNextVerseOrder = async(langCode, order) => {
+    const bookNumber = order[0]
+        chapterNumber = order[1],
+        verseNumber = order[2];
+    const nextVerseOrders = [
+        [bookNumber, chapterNumber, verseNumber+1],
+        [bookNumber, chapterNumber+1, 1],
+        [bookNumber+1, 1, 1]
+    ];
+    for (let o of nextVerseOrders) {
+        try {
+            verse = await getVerse(langCode, o);
+            return { verse, order: o };
+        } catch (e) {
+            console.error(e);
+        }
     }
 };
 

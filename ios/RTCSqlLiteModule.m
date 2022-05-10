@@ -90,6 +90,7 @@ RCT_EXPORT_METHOD(getLanguages: (RCTPromiseResolveBlock)resolve rejecter:(RCTPro
   RCTLogInfo(@"Completed query for languages");
 }
 
+
 bool lazyOpen() {
   NSString *databasePathFromApp = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:DB_NAME];
 
