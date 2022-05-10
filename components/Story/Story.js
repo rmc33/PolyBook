@@ -54,7 +54,7 @@ const Story = ({navigation, route}): Node => {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={[styles.backgroundStyle, colorStyle]}>
-            <Text>{order.join(',')}</Text>
+            <Text>{order.join('.')}</Text>
             <Text>{learn}</Text>
             <Text>{verseLearn}</Text>
             <Text>{reference}</Text>
