@@ -32,19 +32,19 @@ const Story = ({navigation, route}): Node => {
   const [order, setOrder] = useState([1,1,1]);
   
   useEffect(() => {
-    getVerse(route.params.selectedLang.learn, order).then(setVerseLearn);
-    getVerse(route.params.selectedLang.reference, order).then(setVerseReference);
+    const { learn, reference } = route.params.selectedLang;
+    getVerses(learn, reference, order).then((verses) => {
+        setVerseReference(verses[reference]);
+        setVerseLearn(verses[learn]);
+    });
   },[]);
 
   const handleGetNextVerse = () => {
-    getNextVerseOrder(route.params.selectedLang.learn, order).then((verseOrder) => {
-        setVerseLearn(verseOrder.verse);
+    const { learn, reference } = route.params.selectedLang;
+    getNextVerseOrder(learn, reference, order).then((verseOrder) => {
+        setVerseLearn(verseOrder.verses[learn]);
+        setVerseReference(verseOrder.verses[reference]);
         setOrder(verseOrder.order);
-        return verseOrder;
-    }).then((verseOrder)=> {
-        return getVerse(route.params.selectedLang.reference, verseOrder.order);
-    }).then((verse) => {
-        setVerseReference(verse);
     }).catch((error) => {
         console.log('handleGetNextVerse:', error);
     });
@@ -66,17 +66,17 @@ const Story = ({navigation, route}): Node => {
   );
 };
 
-const getVerse = async (langCode, order) => {
+const getVerses = async (langCodeLearn, langCodeRef, order) => {
     try {
-      console.log('getVerse order=', ...order);
-      const verse = await SqlLiteModule.getVerseByOrder(langCode, ...order);
-      return verse;
+      console.log('getVerses order=', ...order);
+      const verses = await SqlLiteModule.getVersesByOrder(langCodeLearn, langCodeRef, ...order);
+      return verses;
     } catch (e) {
       console.error(e);
     }
 };
 
-const getNextVerseOrder = async(langCode, order) => {
+const getNextVerseOrder = async(langCodeLearn, langCodeRef, order) => {
     const bookNumber = order[0]
         chapterNumber = order[1],
         verseNumber = order[2];
@@ -87,10 +87,10 @@ const getNextVerseOrder = async(langCode, order) => {
     ];
     for (let o of nextVerseOrders) {
         try {
-            verse = await getVerse(langCode, o);
-            return { verse, order: o };
+            verses = await getVerses(langCodeLearn, langCodeRef, o);
+            if (verses && verses[langCodeLearn]) return { verses, order: o };
         } catch (e) {
-            console.error(e);
+            console.error('getNextVerseOrder:', e);
         }
     }
 };
