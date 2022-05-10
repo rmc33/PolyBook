@@ -30,9 +30,9 @@ const Story = ({navigation, route}): Node => {
   const [verseLearn, setVerseLearn] = useState('');
   const [verseReference, setVerseReference] = useState('');
   const [order, setOrder] = useState([1,1,1]);
-  
+  const { learn, reference } = route.params.selectedLang;
+
   useEffect(() => {
-    const { learn, reference } = route.params.selectedLang;
     getVerses(learn, reference, order).then((verses) => {
         setVerseReference(verses[reference]);
         setVerseLearn(verses[learn]);
@@ -40,7 +40,6 @@ const Story = ({navigation, route}): Node => {
   },[]);
 
   const handleGetNextVerse = () => {
-    const { learn, reference } = route.params.selectedLang;
     getNextVerseOrder(learn, reference, order).then((verseOrder) => {
         setVerseLearn(verseOrder.verses[learn]);
         setVerseReference(verseOrder.verses[reference]);
@@ -55,9 +54,10 @@ const Story = ({navigation, route}): Node => {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={[styles.backgroundStyle, colorStyle]}>
-            <Text>{route.params.selectedLang.learn}</Text>
+            <Text>{order.join(',')}</Text>
+            <Text>{learn}</Text>
             <Text>{verseLearn}</Text>
-            <Text>{route.params.selectedLang.reference}</Text>
+            <Text>{reference}</Text>
             <Text>{verseReference}</Text>
             <NavigationButton title="Next" onPress={()=>handleGetNextVerse()}/>
             <NavigationButton title="Back" onPress={()=>navigation.navigate('Getting Started')}/>
