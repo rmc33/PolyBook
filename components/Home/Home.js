@@ -79,16 +79,14 @@ const Home = ({navigation}): Node => {
     setActiveLang(activeLang);
     const fetchData = async () => {
       try {
-        if (allLanguages.length == 0) {
-          const languages = await SqlLiteModule.getLanguages();
-          setAllLanguages(languages);
-        }
+        const languages = await SqlLiteModule.getLanguages();
+        setAllLanguages(languages);
       }
       catch(e) {
         console.log('LanguagePicker error', e);
       }
     };
-    fetchData();
+    if (allLanguages.length == 0) fetchData();
   };
 
   const onSelectLang = (langCode) => {
@@ -102,7 +100,7 @@ const Home = ({navigation}): Node => {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
           { languageModalVisible && 
-            <LanguagePicker visible={languageModalVisible} allLanguages={allLanguages} onClose={()=>setLanguageModalVisible(false)} onSelect={onSelectLang}/> 
+            <LanguagePicker visible={true} allLanguages={allLanguages} onClose={()=>setLanguageModalVisible(false)} onSelect={onSelectLang}/> 
           }
           <Section title="Choose a language to learn">
             <ChooseLang title="Select the language you would like to learn while reading." 

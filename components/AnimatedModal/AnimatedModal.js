@@ -13,7 +13,7 @@ interface Props {
 
 export default AnimatedModal = ({ children, visible }: Props) => {
   const translateY = new Animated.Value(height)
-
+  
   const showModal = Animated.timing(translateY, {
     toValue: 0,
     duration,

@@ -58,11 +58,6 @@ RCT_EXPORT_METHOD(getVersesByOrder:(NSString*) langCodeLearn
   RCTLogInfo(@"Completed query with results %d", row_count);
 }
 
-RCT_EXPORT_METHOD(closeDB)
-{
-  sqlite3_close(database);
-}
-
 RCT_EXPORT_METHOD(getLanguages: (RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
   if (!lazyOpen()) {
@@ -83,7 +78,7 @@ RCT_EXPORT_METHOD(getLanguages: (RCTPromiseResolveBlock)resolve rejecter:(RCTPro
   NSMutableArray* languages = [[NSMutableArray alloc] init];
   int row_count = 0;
   while (sqlite3_step(stmt) == SQLITE_ROW) {
-    [languages addObject:[[NSMutableString alloc] initWithUTF8String: (char*) sqlite3_column_text(stmt, 0)]];
+    [languages addObject:[[NSString alloc] initWithUTF8String: (char*) sqlite3_column_text(stmt, 0)]];
     row_count++;
   }
   
@@ -93,6 +88,10 @@ RCT_EXPORT_METHOD(getLanguages: (RCTPromiseResolveBlock)resolve rejecter:(RCTPro
   RCTLogInfo(@"Completed query for languages");
 }
 
+RCT_EXPORT_METHOD(closeDB)
+{
+  sqlite3_close(database);
+}
 
 bool lazyOpen() {
   NSString *databasePathFromApp = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:DB_NAME];

@@ -15,14 +15,41 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { NativeModules, Button, TouchableOpacity } from 'react-native';
 
 import NavigationButton from '../../components/NavigationButton/NavigationButton';
+import MixedWordPhrase from '../../components/MixedWordPhrase/MixedWordPhrase';
 
 const { SqlLiteModule } = NativeModules;
 
 const styles = StyleSheet.create({
     backgroundStyle: {
         height: '100%'
+    },
+    verseLearnText: {
+        fontWeight: '600',
+        fontSize: 16
+    },
+    learnContainer: {
+        backgroundColor: '#fff',
+        display: 'flex',
+        alignItems: 'flex-start',
+        lineHeight: 20,
+        marginTop: 0,
+        marginBottom: 16,
+        marginLeft: 0,
+        marginRight: 0,
+        paddingTop: 16,
+        paddingBottom: 16,
+        paddingRight: 6,
+        paddingLeft: 6
     }
 });
+
+const LearnContainer = ({text}): Node => {
+    return (
+      <View style={[styles.learnContainer]}>
+          <Text style={styles.verseLearnText}>{text}</Text>
+      </View>
+    )
+};
 
 const Story = ({navigation, route}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -53,12 +80,9 @@ const Story = ({navigation, route}): Node => {
     <SafeAreaView style={styles.backgroundStyle}>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        style={[styles.backgroundStyle, colorStyle]}>
-            <Text>{order.join('.')}</Text>
-            <Text>{learn}</Text>
-            <Text>{verseLearn}</Text>
-            <Text>{reference}</Text>
-            <Text>{verseReference}</Text>
+        style={[styles.backgroundStyle]}>
+            <LearnContainer text={verseLearn}/>
+            <MixedWordPhrase text={verseReference}/>
             <NavigationButton title="Next" onPress={()=>handleGetNextVerse()}/>
             <NavigationButton title="Back" onPress={()=>navigation.navigate('Getting Started')}/>
       </ScrollView>
