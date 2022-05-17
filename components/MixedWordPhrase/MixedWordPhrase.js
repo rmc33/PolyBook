@@ -15,8 +15,9 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { NativeModules, Button, TouchableOpacity } from 'react-native';
 
 const styles = StyleSheet.create({
-    backgroundStyle: {
-        
+    containerStyle: {
+        marginTop: 6,
+        marginLeft: 16
     }
 });
 
@@ -25,7 +26,7 @@ const MixedWordPhrase = ({text}): Node => {
   const colorStyle = { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter };
 
   return (
-    <View style={styles.backgroundStyle}>
+    <View style={styles.containerStyle}>
       <Text>{text}</Text>
     </View>
   );

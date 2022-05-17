@@ -7,7 +7,7 @@
 
 import type {Node} from 'react';
 import { StyleSheet, Text, useColorScheme, SafeAreaView,
-  ScrollView, View}  from 'react-native';
+  ScrollView, View, Dimensions }  from 'react-native';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
@@ -23,12 +23,11 @@ const styles = StyleSheet.create({
     backgroundStyle: {
         height: '100%'
     },
-    verseLearnText: {
+    verseReferenceText: {
         fontWeight: '600',
         fontSize: 16
     },
-    learnContainer: {
-        backgroundColor: '#fff',
+    referenceContainer: {
         display: 'flex',
         alignItems: 'flex-start',
         lineHeight: 20,
@@ -39,14 +38,20 @@ const styles = StyleSheet.create({
         paddingTop: 16,
         paddingBottom: 16,
         paddingRight: 6,
-        paddingLeft: 6
+        paddingLeft: 16
+    },
+    contentContainer: {
+
+    },
+    navigationContainer: {
+    
     }
 });
 
-const LearnContainer = ({text}): Node => {
+const ReferenceContainer = ({text}): Node => {
     return (
-      <View style={[styles.learnContainer]}>
-          <Text style={styles.verseLearnText}>{text}</Text>
+      <View style={[styles.referenceContainer]}>
+          <Text style={styles.verseReferenceText}>{text}</Text>
       </View>
     )
 };
@@ -75,16 +80,21 @@ const Story = ({navigation, route}): Node => {
         console.log('handleGetNextVerse:', error);
     });
   };
-
+  const { height } = Dimensions.get('window');
+  const contentHeight = { height: height-200 };
   return (
     <SafeAreaView style={styles.backgroundStyle}>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={[styles.backgroundStyle]}>
-            <LearnContainer text={verseLearn}/>
-            <MixedWordPhrase text={verseReference}/>
-            <NavigationButton title="Next" onPress={()=>handleGetNextVerse()}/>
-            <NavigationButton title="Back" onPress={()=>navigation.navigate('Getting Started')}/>
+            <View style={[styles.contentContainer], contentHeight}>
+              <ReferenceContainer text={verseReference}/>
+              <MixedWordPhrase text={verseLearn}/>
+            </View>
+            <View style={styles.navigationContainer}>
+              <NavigationButton title="Next" onPress={()=>handleGetNextVerse()}/>
+              <NavigationButton title="Back" onPress={()=>navigation.navigate('Getting Started')}/>
+            </View>
       </ScrollView>
     </SafeAreaView>
   );

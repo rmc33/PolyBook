@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
 
 const LanguagePicker  = ({ visible, onClose, onSelect, allLanguages }): Node => {
   const isDarkMode = useColorScheme() === 'dark';
-  console.log('setting visible====', visible);
   return (
       <AnimatedModal visible={visible}>
         <View
