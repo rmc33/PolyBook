@@ -27,7 +27,7 @@ RCT_EXPORT_METHOD(getVersesByOrder:(NSString*) langCodeLearn
     rejecter:(RCTPromiseRejectBlock)reject)
 {
  
-  if (!lazyOpen()) {
+  if ([self lazyOpenDB] == false) {
     reject(@"db error", @"Error opening database", nil);
   }
   
@@ -60,7 +60,7 @@ RCT_EXPORT_METHOD(getVersesByOrder:(NSString*) langCodeLearn
 
 RCT_EXPORT_METHOD(getLanguages: (RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-  if (!lazyOpen()) {
+  if ([self lazyOpenDB] == false) {
     reject(@"db error", @"Error opening database", nil);
   }
  
@@ -93,7 +93,7 @@ RCT_EXPORT_METHOD(closeDB)
   sqlite3_close(database);
 }
 
-bool lazyOpen() {
+- (bool)lazyOpenDB {
   NSString *databasePathFromApp = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:DB_NAME];
 
   if (database == NULL) {

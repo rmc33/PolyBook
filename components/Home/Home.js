@@ -21,18 +21,23 @@ const { SqlLiteModule } = NativeModules;
 
 const styles = StyleSheet.create({
     sectionContainer: {
-      marginTop: 32,
+      marginTop: 50,
       paddingHorizontal: 24,
     },
     sectionTitle: {
-      fontSize: 24,
+      fontSize: 28,
       fontWeight: '600',
     },
     sectionDescription: {
-      marginTop: 8
+      marginTop: 10
     },
     linkBtn: {
-      color: '#414042'
+      color: '#414042',
+      fontSize: 20,
+      marginBottom: 5
+    },
+    navigationContainer: {
+      height: 70
     }
   });
 
@@ -96,24 +101,26 @@ const Home = ({navigation}): Node => {
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-          { languageModalVisible && 
-            <LanguagePicker visible={true} allLanguages={allLanguages} onClose={()=>setLanguageModalVisible(false)} onSelect={onSelectLang}/> 
-          }
-          <Section title="Choose a language to learn">
-            <ChooseLang title="Select the language you would like to learn while reading." 
-              languageCode={selectedLang.learn}
-              onPress={() => handleChooseLang('learn')}/>
-          </Section>
-          <Section title="Choose a reference language">
-            <ChooseLang title="Select the language you would like to use for translation." 
-              languageCode={selectedLang.reference}
-              onPress={() => handleChooseLang('reference')}/>
-          </Section>
+    <ScrollView
+      contentInsetAdjustmentBehavior="automatic"
+      style={backgroundStyle}>
+        { languageModalVisible && 
+          <LanguagePicker visible={true} allLanguages={allLanguages} onClose={()=>setLanguageModalVisible(false)} onSelect={onSelectLang}/> 
+        }
+        <Section title="Choose a reference language">
+          <ChooseLang title="Select the language you would like to use for translation." 
+            languageCode={selectedLang.reference}
+            onPress={() => handleChooseLang('reference')}/>
+        </Section>
+        <Section title="Choose a language to learn">
+          <ChooseLang title="Select the language you would like to learn while reading." 
+            languageCode={selectedLang.learn}
+            onPress={() => handleChooseLang('learn')}/>
+        </Section>
+        <View style={styles.navigationContainer}>
           <NavigationButton title="Next" onPress={()=>navigation.navigate('Story', {selectedLang})}/>
-      </ScrollView>
+        </View>
+    </ScrollView>
     </SafeAreaView>
   )
 };

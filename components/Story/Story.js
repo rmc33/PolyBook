@@ -7,7 +7,7 @@
 
 import type {Node} from 'react';
 import { StyleSheet, Text, useColorScheme, SafeAreaView,
-  ScrollView, View, Dimensions }  from 'react-native';
+  ScrollView, View, useWindowDimensions }  from 'react-native';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     },
     verseReferenceText: {
         fontWeight: '600',
-        fontSize: 16
+        fontSize: 18
     },
     referenceContainer: {
         display: 'flex',
@@ -44,7 +44,9 @@ const styles = StyleSheet.create({
 
     },
     navigationContainer: {
-    
+      height: 140,
+      borderTopWidth: 1,
+      borderColor: '#D3D3D3'
     }
 });
 
@@ -80,22 +82,24 @@ const Story = ({navigation, route}): Node => {
         console.log('handleGetNextVerse:', error);
     });
   };
-  const { height } = Dimensions.get('window');
-  const contentHeight = { height: height-200 };
+
+  const { height, width } = useWindowDimensions();
+  const contentHeight = { height: height - 100};
+
   return (
     <SafeAreaView style={styles.backgroundStyle}>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={[styles.backgroundStyle]}>
-            <View style={[styles.contentContainer], contentHeight}>
-              <ReferenceContainer text={verseReference}/>
-              <MixedWordPhrase text={verseLearn}/>
-            </View>
-            <View style={styles.navigationContainer}>
-              <NavigationButton title="Next" onPress={()=>handleGetNextVerse()}/>
-              <NavigationButton title="Back" onPress={()=>navigation.navigate('Getting Started')}/>
-            </View>
+          <View style={[styles.contentContainer]}>
+            <ReferenceContainer text={verseReference}/>
+            <MixedWordPhrase text={verseLearn}/>
+          </View>
       </ScrollView>
+      <View style={styles.navigationContainer}>
+        <NavigationButton title="Next" onPress={()=>handleGetNextVerse()}/>
+        <NavigationButton title="Back" onPress={()=>navigation.navigate('Getting Started')}/>
+      </View>
     </SafeAreaView>
   );
 };

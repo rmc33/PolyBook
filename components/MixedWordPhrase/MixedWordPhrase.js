@@ -13,23 +13,105 @@ import { useState, useEffect } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 import { NativeModules, Button, TouchableOpacity } from 'react-native';
+import AnswerPhrase from '../AnswerPhrase/AnswerPhrase';
 
 const styles = StyleSheet.create({
     containerStyle: {
-        marginTop: 6,
-        marginLeft: 16
-    }
+      marginTop: 6,
+      marginLeft: 16,
+      marginRight: 16
+    },
+    word: {
+      fontSize:14,
+      marginLeft:10,
+      marginRight:10,
+      marginTop:10,
+      paddingLeft: 5,
+      paddingRight: 5,
+      borderColor: '#0b6efd',
+      borderWidth: 1
+  },
+  mixedWords: {
+    display: 'flex',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 30,
+    paddingBottom: 10
+  },
+  wordContainer: {
+    marginTop: 10
+  }
 });
 
 const MixedWordPhrase = ({text}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
   const colorStyle = { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter };
+  const phrase = parsePhrase(text);
+  const shuffledPhrase = shuffleArray([...phrase]);
+  const [answerPhrase, setAnswerPhrase] = useState([]);
+  const [mixedPhrase, setMixedPhrase] = useState([]);
+  const [nextWordIndex, setNextWordIndex] = useState(0);
+
+  useEffect(()=> {
+    setAnswerPhrase(phrase);
+    setMixedPhrase(shuffledPhrase);
+    setNextWordIndex(0);
+  },[text]);
+
+  function handleSelectWord(word, index) {
+    if (word.value === answerPhrase[nextWordIndex].value) {
+      const mixedWord = Object.assign({},mixedPhrase[index], { isCorrect: true });
+      mixedPhrase[index] = mixedWord;
+      const answeredWord = Object.assign({},answerPhrase[nextWordIndex], {isCorrect: true });
+      answerPhrase[nextWordIndex] = answeredWord;
+      setMixedPhrase(mixedPhrase);
+      setAnswerPhrase(answerPhrase);
+      setNextWordIndex(nextWordIndex+1);
+    }
+  }
 
   return (
     <View style={styles.containerStyle}>
-      <Text>{text}</Text>
+      <AnswerPhrase words={answerPhrase}/>
+      <MixedWords words={mixedPhrase} onSelectWord={handleSelectWord}/>
     </View>
   );
 };
+
+const MixedWords = ({words, onSelectWord}) => {
+  const isDarkMode = useColorScheme() === 'dark';
+  const colorStyle = {
+    color: isDarkMode ? Colors.lighter : Colors.darker
+  };
+  return (
+    <View style={styles.mixedWords}>
+        { words.map((word,index) => {
+            return (
+              <TouchableOpacity key={`to_${index}`} style={styles.wordContainer} onPress={() => onSelectWord(word,index)}>
+                  {!word.isCorrect && <Text key={`t_${index}`} style={[styles.word, colorStyle]}>{word.value}</Text> }
+              </TouchableOpacity>
+            );
+        })}
+    </View>
+  );
+};
+
+function parsePhrase(text) {
+  return text.split(/\s+/).filter((w) => {
+      return w.replace(/\s/g).length > 0;
+    }).map((w, index) => {
+      return { isCorrect: false, value: w, originalIndex: index };
+    });
+}
+
+function shuffleArray(array) {
+  for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+  }
+  return array;
+}
 
 export default MixedWordPhrase;
