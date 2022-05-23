@@ -22,7 +22,7 @@ const App: () => Node = () => {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Getting Started">
           <Stack.Screen name="Getting Started" component={Home} options={{headerShown:true}}/>
-          <Stack.Screen name="Choose Chapter" component={ChapterPicker} options={{headerShown:false}}/>
+          <Stack.Screen name="Choose Book" component={ChapterPicker} options={{headerShown:true}}/>
           <Stack.Screen name="Story" component={Story} options={{headerShown:false}}/>
         </Stack.Navigator>
       </NavigationContainer>

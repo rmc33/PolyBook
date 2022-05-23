@@ -130,7 +130,7 @@ RCT_EXPORT_METHOD(closeDB)
   sqlite3_close(database);
 }
 
-- (bool)lazyOpenDB {
+- (bool)lazyOpenDB {  
   NSString *databasePathFromApp = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:DB_NAME];
 
   if (database == NULL) {

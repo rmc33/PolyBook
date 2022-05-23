@@ -60,19 +60,20 @@ const ChapterPicker  = ({navigation, route}): Node => {
     height: '100%'
   };
   const chapters = route.params.chapters;
+  let selectedBook = {};
+  const onBookSelected = (title) => {
+    selectedBook = chapters[title][0];
+    navigation.navigate('Story', {selectedLang, chapters, selectedBook});
+  }
   return (
     <SafeAreaView style={backgroundStyle}>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-            <Text>Pick chapter</Text>
-            <Item title={`${chapters[0][0]}: ${chapters[0][1]}.${chapters[0][2]}.${chapters[0][3]}`}/>
-            <Item title={`${chapters[1][0]}: ${chapters[1][1]}.${chapters[1][2]}.${chapters[1][3]}`}/>
+            { Object.keys(chapters).map((c) => {
+              return <Item key={c} title={c} onSelect={() => onBookSelected(c)}/>
+            })}
         </ScrollView>
-        <View style={styles.navigationContainer}>
-          <NavigationButton title="Next" onPress={()=>navigation.navigate('Story', {selectedLang, chapters})}/>
-          <NavigationButton title="Back" onPress={()=>navigation.navigate('Getting Started', {selectedLang})}/>
-        </View>
       </SafeAreaView>
   );
 };

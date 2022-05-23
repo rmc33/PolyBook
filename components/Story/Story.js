@@ -66,14 +66,28 @@ const Story = ({navigation, route}): Node => {
   const [order, setOrder] = useState([1,1,1]);
   const selectedLang = route.params.selectedLang;
   const chapters = route.params.chapters;
+  const selectedBook = route.params.selectedBook;
   const { learn, reference } = selectedLang;
 
   useEffect(() => {
-    getVerses(learn, reference, order).then((verses) => {
+    if (selectedBook) {
+      const selectedStartOrder = [
+        selectedBook.bookNumber, 
+        selectedBook.chapterNumber, 
+        selectedBook.verseNumber
+      ];
+      getVerses(learn, reference, selectedStartOrder).then((verses) => {
         setVerseReference(verses[reference]);
         setVerseLearn(verses[learn]);
-    });
-  },[]);
+        setOrder(selectedStartOrder);
+      });
+      return;
+    }
+    // getVerses(learn, reference, order).then((verses) => {
+    //     setVerseReference(verses[reference]);
+    //     setVerseLearn(verses[learn]);
+    // });
+  },[selectedBook]);
 
   const handleGetNextVerse = () => {
     getNextVerseOrder(learn, reference, order).then((verseOrder) => {
@@ -100,7 +114,7 @@ const Story = ({navigation, route}): Node => {
       </ScrollView>
       <View style={styles.navigationContainer}>
         <NavigationButton title="Next" onPress={()=>handleGetNextVerse()}/>
-        <NavigationButton title="Back" onPress={()=>navigation.navigate('Choose Chapter', { selectedLang, chapters } )}/>
+        <NavigationButton title="Back" onPress={()=>navigation.navigate('Choose Book', { selectedLang, chapters } )}/>
       </View>
     </SafeAreaView>
   );
