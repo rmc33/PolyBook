@@ -81,12 +81,7 @@ const Story = ({navigation, route}): Node => {
         setVerseLearn(verses[learn]);
         setOrder(selectedStartOrder);
       });
-      return;
     }
-    // getVerses(learn, reference, order).then((verses) => {
-    //     setVerseReference(verses[reference]);
-    //     setVerseLearn(verses[learn]);
-    // });
   },[selectedBook]);
 
   const handleGetNextVerse = () => {
