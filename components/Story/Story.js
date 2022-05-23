@@ -64,7 +64,9 @@ const Story = ({navigation, route}): Node => {
   const [verseLearn, setVerseLearn] = useState('');
   const [verseReference, setVerseReference] = useState('');
   const [order, setOrder] = useState([1,1,1]);
-  const { learn, reference } = route.params.selectedLang;
+  const selectedLang = route.params.selectedLang;
+  const chapters = route.params.chapters;
+  const { learn, reference } = selectedLang;
 
   useEffect(() => {
     getVerses(learn, reference, order).then((verses) => {
@@ -98,7 +100,7 @@ const Story = ({navigation, route}): Node => {
       </ScrollView>
       <View style={styles.navigationContainer}>
         <NavigationButton title="Next" onPress={()=>handleGetNextVerse()}/>
-        <NavigationButton title="Back" onPress={()=>navigation.navigate('Getting Started')}/>
+        <NavigationButton title="Back" onPress={()=>navigation.navigate('Choose Chapter', { selectedLang, chapters } )}/>
       </View>
     </SafeAreaView>
   );

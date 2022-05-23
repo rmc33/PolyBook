@@ -14,6 +14,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 import { NativeModules, Button, TouchableOpacity } from 'react-native';
 import AnswerPhrase from '../AnswerPhrase/AnswerPhrase';
+import CenteredSpeaker from '../CenteredSpeaker/CenteredSpeaker';
 
 const styles = StyleSheet.create({
     containerStyle: {
@@ -22,10 +23,10 @@ const styles = StyleSheet.create({
       marginRight: 16
     },
     word: {
-      fontSize:14,
-      marginLeft:10,
-      marginRight:10,
-      marginTop:10,
+      fontSize: 14,
+      marginLeft: 10,
+      marginRight: 10,
+      marginTop: 10,
       paddingLeft: 5,
       paddingRight: 5,
       borderColor: '#0b6efd',
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: "row",
     flexWrap: "wrap",
-    marginTop: 30,
+    marginTop: 6,
     paddingBottom: 10
   },
   wordContainer: {
@@ -62,7 +63,7 @@ const MixedWordPhrase = ({text}): Node => {
     if (word.value === answerPhrase[nextWordIndex].value) {
       const mixedWord = Object.assign({},mixedPhrase[index], { isCorrect: true });
       mixedPhrase[index] = mixedWord;
-      const answeredWord = Object.assign({},answerPhrase[nextWordIndex], {isCorrect: true });
+      const answeredWord = Object.assign({},answerPhrase[nextWordIndex], { isCorrect: true });
       answerPhrase[nextWordIndex] = answeredWord;
       setMixedPhrase(mixedPhrase);
       setAnswerPhrase(answerPhrase);
@@ -73,6 +74,7 @@ const MixedWordPhrase = ({text}): Node => {
   return (
     <View style={styles.containerStyle}>
       <AnswerPhrase words={answerPhrase}/>
+      <CenteredSpeaker/>
       <MixedWords words={mixedPhrase} onSelectWord={handleSelectWord}/>
     </View>
   );
@@ -99,9 +101,9 @@ const MixedWords = ({words, onSelectWord}) => {
 function parsePhrase(text) {
   return text.split(/\s+/).filter((w) => {
       return w.replace(/\s/g).length > 0;
-    }).map((w, index) => {
+  }).map((w, index) => {
       return { isCorrect: false, value: w, originalIndex: index };
-    });
+  });
 }
 
 function shuffleArray(array) {

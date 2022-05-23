@@ -22,21 +22,25 @@ const styles = StyleSheet.create({
         marginRight: 6,
         display: 'flex',
         flexDirection: "row",
-        flexWrap: "wrap",
+        flexWrap: "wrap"
     },
     word: {
         fontSize:14,
-        marginLeft:1,
-        marginRight:1,
-        marginTop: 5,
-        marginBottom: 5,
+        // marginLeft:1,
+        // marginRight:1,
+        // marginTop: 1,
+        // marginBottom: 1,
         paddingLeft: 5,
         paddingRight: 5,
-        borderColor: '#000',
-        borderWidth: 1
+        // borderColor: '#000',
+        // borderWidth: 1
     },
     wordContainer: {
-        //borderBottomWidth: 1
+        borderWidth: 1,
+        marginLeft:2,
+        marginRight:2,
+        marginTop: 2,
+        marginBottom: 2
     }
 });
 

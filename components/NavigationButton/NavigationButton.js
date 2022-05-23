@@ -6,7 +6,7 @@ import React from 'react';
 
 const styles = StyleSheet.create({
     container: {
-      marginTop: 34,
+      marginTop: 30,
       flex: 1,
       alignItems: 'center'
     },

@@ -55,7 +55,7 @@ RCT_EXPORT_METHOD(getVersesByOrder:(NSString*) langCodeLearn
   stmt = NULL;
   sqlite3_finalize(stmt);
   resolve(verses);
-  RCTLogInfo(@"Completed query with results %d", row_count);
+  RCTLogInfo(@"Completed query with row count %d", row_count);
 }
 
 RCT_EXPORT_METHOD(getLanguages: (RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
@@ -85,7 +85,44 @@ RCT_EXPORT_METHOD(getLanguages: (RCTPromiseResolveBlock)resolve rejecter:(RCTPro
   stmt = NULL;
   sqlite3_finalize(stmt);
   resolve(languages);
-  RCTLogInfo(@"Completed query for languages");
+  RCTLogInfo(@"Completed query for languages with row count %d", row_count);
+}
+
+RCT_EXPORT_METHOD(getChapters:(NSString*) langCode
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+  if ([self lazyOpenDB] == false) {
+    reject(@"db error", @"Error opening database", nil);
+  }
+ 
+  NSString *sql = [NSString stringWithFormat:@"select b.name, b.number, c.number, v.number from verse v, chapter c, book b, bible bb where bb.lang = '%@' and b.bible_id = bb.id and c.book_id = b.id and v.chapter_id = c.id", langCode];
+  sqlite3_stmt *stmt = NULL;
+  
+  RCTLogInfo(@"Running a query %s", [sql UTF8String]);
+  
+  if (sqlite3_prepare_v2(database, [sql UTF8String], -1, &stmt , NULL) != SQLITE_OK) {
+    RCTLogInfo(@"Error: failed to prepare query statement with message '%s'.", sqlite3_errmsg(database));
+    reject(@"db error", @"Error querying database", nil);
+    return;
+  }
+  
+  NSMutableArray* chapters = [[NSMutableArray alloc] init];
+  int row_count = 0;
+  while (sqlite3_step(stmt) == SQLITE_ROW) {
+    NSMutableArray* chapterInfo = [[NSMutableArray alloc] init];
+    [chapterInfo addObject:[[NSString alloc] initWithUTF8String: (char*) sqlite3_column_text(stmt, 0)]];
+    [chapterInfo addObject: [NSNumber numberWithInt: (int) sqlite3_column_int(stmt, 1)]];
+    [chapterInfo addObject: [NSNumber numberWithInt: (int) sqlite3_column_int(stmt, 2)]];
+    [chapterInfo addObject: [NSNumber numberWithInt: (int) sqlite3_column_int(stmt, 3)]];
+    [chapters addObject: chapterInfo];
+    row_count++;
+  }
+  
+  stmt = NULL;
+  sqlite3_finalize(stmt);
+  resolve(chapters);
+  RCTLogInfo(@"Completed query for chapters with row count %d", row_count);
 }
 
 RCT_EXPORT_METHOD(closeDB)

@@ -99,6 +99,19 @@ const Home = ({navigation}): Node => {
     setSelectedLang(Object.assign(selectedLang, {[activeLang] : langCode}));
   };
 
+  const selectChapter = () => {
+    const fetchData = async () => {
+      try {
+        const chapters = await SqlLiteModule.getChapters(selectedLang.reference);
+        navigation.navigate('Choose Chapter', { selectedLang, chapters });
+      }
+      catch(e) {
+        console.log('LanguagePicker error', e);
+      }
+    };
+    fetchData();
+  };
+
   return (
     <SafeAreaView style={backgroundStyle}>
     <ScrollView
@@ -118,7 +131,7 @@ const Home = ({navigation}): Node => {
             onPress={() => handleChooseLang('learn')}/>
         </Section>
         <View style={styles.navigationContainer}>
-          <NavigationButton title="Next" onPress={()=>navigation.navigate('Story', {selectedLang})}/>
+          <NavigationButton title="Next" onPress={selectChapter}/>
         </View>
     </ScrollView>
     </SafeAreaView>
