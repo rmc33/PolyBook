@@ -6,15 +6,13 @@
  */
 
 import type {Node} from 'react';
-import {StyleSheet, Text, useColorScheme, Dimensions} from 'react-native';
+import {StyleSheet, Text, useColorScheme, useWindowDimensions} from 'react-native';
 import React from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { View, ScrollView, TouchableOpacity } from 'react-native';
 import AnimatedModal from '../../components/AnimatedModal/AnimatedModal';
 import { Button } from 'react-native';
 import SelectedLanguage from '../../components/SelectedLanguage/SelectedLanguage';
-
-const { height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     sectionTitle: {
@@ -52,6 +50,7 @@ const styles = StyleSheet.create({
 
 const LanguagePicker  = ({ visible, onClose, onSelect, allLanguages }): Node => {
   const isDarkMode = useColorScheme() === 'dark';
+  const { height, width } = useWindowDimensions();
   return (
       <AnimatedModal visible={visible}>
         <View

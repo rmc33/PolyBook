@@ -61,8 +61,8 @@ const ChapterPicker  = ({navigation, route}): Node => {
   };
   const chapters = route.params.chapters;
   let selectedBook = {};
-  const onBookSelected = (title) => {
-    selectedBook = chapters[title][0];
+  const onBookSelected = (book) => {
+    selectedBook = { bookNumber: book[1], chapterNumber: 1, verseNumber: 1 };
     navigation.navigate('Story', {selectedLang, chapters, selectedBook});
   }
   return (
@@ -70,8 +70,8 @@ const ChapterPicker  = ({navigation, route}): Node => {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-            { Object.keys(chapters).map((c) => {
-              return <Item key={c} title={c} onSelect={() => onBookSelected(c)}/>
+            { chapters.map((c) => {
+              return <Item key={c} title={c[0]} onSelect={() => onBookSelected(c)}/>
             })}
         </ScrollView>
       </SafeAreaView>

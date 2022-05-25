@@ -99,24 +99,10 @@ const Home = ({navigation}): Node => {
     setSelectedLang(Object.assign(selectedLang, {[activeLang] : langCode}));
   };
 
-  const groupByBook = (allChapters) => {
-    const chapters = {};
-    allChapters.forEach((c) => {
-      if (chapters.hasOwnProperty(c[0])) {
-        chapters[c[0]].push({bookNumber: c[1], chapterNumber: c[2], verseNumber: c[3]});
-      }
-      else {
-        chapters[c[0]] = [{bookNumber: c[1], chapterNumber: c[2], verseNumber: c[3]}];
-      }
-    });
-    return chapters;
-  };
-
   const selectChapter = () => {
     const fetchData = async () => {
       try {
-        const allChapters = await SqlLiteModule.getChapters(selectedLang.reference);
-        const chapters = groupByBook(allChapters);
+        const chapters = await SqlLiteModule.getChapters(selectedLang.reference);
         navigation.navigate('Choose Book', { selectedLang, chapters });
       }
       catch(e) {

@@ -96,7 +96,7 @@ RCT_EXPORT_METHOD(getChapters:(NSString*) langCode
     reject(@"db error", @"Error opening database", nil);
   }
  
-  NSString *sql = [NSString stringWithFormat:@"select b.name, b.number, c.number, v.number from verse v, chapter c, book b, bible bb where bb.lang = '%@' and b.bible_id = bb.id and c.book_id = b.id and v.chapter_id = c.id", langCode];
+  NSString *sql = [NSString stringWithFormat:@"select b.name, b.number from book b, bible bb where bb.lang = '%@' and b.bible_id = bb.id", langCode];
   sqlite3_stmt *stmt = NULL;
   
   RCTLogInfo(@"Running a query %s", [sql UTF8String]);
@@ -106,19 +106,17 @@ RCT_EXPORT_METHOD(getChapters:(NSString*) langCode
     reject(@"db error", @"Error querying database", nil);
     return;
   }
-  
+
   NSMutableArray* chapters = [[NSMutableArray alloc] init];
   int row_count = 0;
   while (sqlite3_step(stmt) == SQLITE_ROW) {
     NSMutableArray* chapterInfo = [[NSMutableArray alloc] init];
     [chapterInfo addObject:[[NSString alloc] initWithUTF8String: (char*) sqlite3_column_text(stmt, 0)]];
-    [chapterInfo addObject: [NSNumber numberWithInt: (int) sqlite3_column_int(stmt, 1)]];
-    [chapterInfo addObject: [NSNumber numberWithInt: (int) sqlite3_column_int(stmt, 2)]];
-    [chapterInfo addObject: [NSNumber numberWithInt: (int) sqlite3_column_int(stmt, 3)]];
+    [chapterInfo addObject:[NSNumber numberWithInt: (int) sqlite3_column_int(stmt, 1)]];
     [chapters addObject: chapterInfo];
     row_count++;
   }
-  
+
   stmt = NULL;
   sqlite3_finalize(stmt);
   resolve(chapters);
@@ -130,9 +128,8 @@ RCT_EXPORT_METHOD(closeDB)
   sqlite3_close(database);
 }
 
-- (bool)lazyOpenDB {  
+- (bool)lazyOpenDB {
   NSString *databasePathFromApp = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:DB_NAME];
-
   if (database == NULL) {
     if (sqlite3_open([databasePathFromApp UTF8String], &database) != SQLITE_OK) {
       RCTLogInfo(@"Couldn't open %s", [databasePathFromApp UTF8String]);
