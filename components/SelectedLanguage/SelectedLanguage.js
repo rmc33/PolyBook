@@ -22,7 +22,8 @@ const emojiMap = {
     'SV': '🇸🇪',
     'KO': '🇰🇷',
     'NL': '🇳🇱',
-    'EL': '🇬🇷'
+    'EL': '🇬🇷',
+    'PL': '🇵🇱'
 };
 
 const getEmoji = (languageCode: string): string => {

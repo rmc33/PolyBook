@@ -12,7 +12,6 @@ import React from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import NavigationButton from '../NavigationButton/NavigationButton';
 
-const { height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     sectionTitle: {
@@ -29,9 +28,15 @@ const styles = StyleSheet.create({
       flexDirection: 'row'
     },
     navigationContainer: {
-      height: 140,
+      height: 70,
       borderTopWidth: 1,
       borderColor: '#D3D3D3'
+    },
+    screenTitle: {
+      marginLeft: 10,
+      fontSize: 16,
+      fontWeight: '600',
+      marginBottom: 10
     }
   });
 
@@ -67,6 +72,7 @@ const ChapterPicker  = ({navigation, route}): Node => {
   }
   return (
     <SafeAreaView style={backgroundStyle}>
+      <Text style={styles.screenTitle}>Choose Chapter</Text>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
@@ -74,6 +80,9 @@ const ChapterPicker  = ({navigation, route}): Node => {
               return <Item key={c} title={c[0]} onSelect={() => onBookSelected(c)}/>
             })}
         </ScrollView>
+        <View style={styles.navigationContainer}>
+          <NavigationButton title="Back" onPress={()=>navigation.navigate('Getting Started')}/>
+        </View>
       </SafeAreaView>
   );
 };
