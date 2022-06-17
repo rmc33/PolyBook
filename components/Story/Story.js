@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
 
     },
     navigationContainer: {
-      height: 140,
       borderTopWidth: 1,
       borderColor: '#D3D3D3'
     }
@@ -96,6 +95,7 @@ const Story = ({navigation, route}): Node => {
 
   const { height, width } = useWindowDimensions();
   const contentHeight = { height: height - 100};
+  const navContainerHeight = { height: 140 }; //change  height when two buttons are shown
 
   return (
     <SafeAreaView style={styles.backgroundStyle}>
@@ -107,7 +107,7 @@ const Story = ({navigation, route}): Node => {
             <MixedWordPhrase text={verseLearn}/>
           </View>
       </ScrollView>
-      <View style={styles.navigationContainer}>
+      <View style={[styles.navigationContainer, navContainerHeight]}>
         <NavigationButton title="Next" onPress={()=>handleGetNextVerse()}/>
         <NavigationButton title="Back" onPress={()=>navigation.navigate('Choose Book', { selectedLang, chapters } )}/>
       </View>

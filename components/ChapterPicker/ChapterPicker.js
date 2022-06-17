@@ -64,6 +64,7 @@ const ChapterPicker  = ({navigation, route}): Node => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     height: '100%'
   };
+  const chapterProgress = route.params.chapterProgress || {};
   const chapters = route.params.chapters;
   let selectedBook = {};
   const onBookSelected = (book) => {
@@ -77,7 +78,7 @@ const ChapterPicker  = ({navigation, route}): Node => {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
             { chapters.map((c) => {
-              return <Item key={c} title={c[0]} onSelect={() => onBookSelected(c)}/>
+              return <Item key={c} title={c[0]} progress={chapterProgress[c[1]]} onSelect={() => onBookSelected(c)}/>
             })}
         </ScrollView>
         <View style={styles.navigationContainer}>

@@ -14,6 +14,7 @@
 		2D68DC488E0E42E34DBBD4F8 /* libPods-AwesomeProject-AwesomeProjectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C76C0D6CA92D2AFB8F2A81F /* libPods-AwesomeProject-AwesomeProjectTests.a */; };
 		51215565280BC15B0084C42F /* bible.db in Resources */ = {isa = PBXBuildFile; fileRef = 51215564280BC15B0084C42F /* bible.db */; };
 		5147DAE4280BAF1D0088D01F /* RTCSqlLiteModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 5147DAE3280BAF1D0088D01F /* RTCSqlLiteModule.m */; };
+		515E01422855158200BD6E39 /* RCTAppDataModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 515E01412855158000BD6E39 /* RCTAppDataModule.m */; };
 		7229E263828E8BCC38D01B59 /* libPods-AwesomeProject.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 79098955D1D48B6154E247BC /* libPods-AwesomeProject.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -44,6 +45,8 @@
 		51215564280BC15B0084C42F /* bible.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = bible.db; sourceTree = "<group>"; };
 		5147DAE2280BAEC00088D01F /* RCTSqlLiteModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTSqlLiteModule.h; sourceTree = "<group>"; };
 		5147DAE3280BAF1D0088D01F /* RTCSqlLiteModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTCSqlLiteModule.m; sourceTree = "<group>"; };
+		515E01402855133900BD6E39 /* RCTAppDataModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTAppDataModule.h; sourceTree = "<group>"; };
+		515E01412855158000BD6E39 /* RCTAppDataModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTAppDataModule.m; sourceTree = "<group>"; };
 		6E04375354C2B20415499B80 /* Pods-AwesomeProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeProject.debug.xcconfig"; path = "Target Support Files/Pods-AwesomeProject/Pods-AwesomeProject.debug.xcconfig"; sourceTree = "<group>"; };
 		79098955D1D48B6154E247BC /* libPods-AwesomeProject.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AwesomeProject.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AwesomeProject/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -100,6 +103,8 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 				5147DAE2280BAEC00088D01F /* RCTSqlLiteModule.h */,
 				5147DAE3280BAF1D0088D01F /* RTCSqlLiteModule.m */,
+				515E01402855133900BD6E39 /* RCTAppDataModule.h */,
+				515E01412855158000BD6E39 /* RCTAppDataModule.m */,
 			);
 			name = AwesomeProject;
 			sourceTree = "<group>";
@@ -422,6 +427,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				5147DAE4280BAF1D0088D01F /* RTCSqlLiteModule.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				515E01422855158200BD6E39 /* RCTAppDataModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

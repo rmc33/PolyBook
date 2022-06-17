@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
       paddingHorizontal: 5,
       paddingVertical: 5,
       width: '80%',
+      height: 150,
       flex: 1,
       alignItems: 'center'
     }

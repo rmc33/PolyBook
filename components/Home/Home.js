@@ -7,7 +7,7 @@
 
 import type {Node} from 'react';
 import { StyleSheet, Text, useColorScheme, SafeAreaView,
-  ScrollView, View, Dimensions}  from 'react-native';
+  ScrollView, View, Dimensions, AsyncStorage}  from 'react-native';
 import React from 'react';
 import { useState } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
@@ -103,7 +103,9 @@ const Home = ({navigation}): Node => {
     const fetchData = async () => {
       try {
         const chapters = await SqlLiteModule.getChapters(selectedLang.reference);
-        navigation.navigate('Choose Book', { selectedLang, chapters });
+        var result = await AsyncStorage.getItem('chapterProgress');
+        chapterProgress = JSON.parse(result);
+        navigation.navigate('Choose Book', { selectedLang, chapters, chapterProgress });
       }
       catch(e) {
         console.log('LanguagePicker error', e);
