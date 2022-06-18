@@ -7,13 +7,14 @@ export default AppData = () => {
     const allChaptersCompleted = {};
 
     const updateChaptersCompleted = (chapterCompleted) => {
-        var book = allChaptersCompleted[chapterCompleted.bookId] || {};
-        book[chapterCompleted.chapterId] = {
-            lastPageCompletedId: chapterCompleted.lastPageCompletedId,
-            totalPagesInChapter: chapterCompleted.totalPagesInChapter,
-            percentageCompleted: chapterCompleted.lastPageCompletedId / chapterCompleted.totalPagesInChapter * 100
+        const { bookId, chapterId, lastPageCompletedId, totalPagesInChapter } = chapterCompleted;
+        const book = allChaptersCompleted[bookId] || {};
+        book[chapterId] = {
+            lastPageCompletedId,
+            totalPagesInChapter,
+            percentageCompleted: lastPageCompletedId / totalPagesInChapter * 100
         };
-        allChaptersCompleted[chapterCompleted.bookId] = book;
+        allChaptersCompleted[bookId] = book;
         AppDataModule.updateChaptersCompleted(JSON.stringify(allChaptersCompleted));
     };
 
