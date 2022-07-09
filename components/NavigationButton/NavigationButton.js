@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
       color: "#fff"
     },
     customBtnBG: {
-      backgroundColor: "#0b6efd",
+      backgroundColor: '#0b6efd',
       paddingHorizontal: 5,
       paddingVertical: 5,
       width: '80%',
@@ -26,11 +26,12 @@ const styles = StyleSheet.create({
     }
   });
 
-const NavigationButton = ({title, onPress }): Node => {
+const NavigationButton = ({title, onPress, color}): Node => {
+    const backgroundColor = color === 'green' ? '#0F9D58' : '#0b6efd';
     return (
       <View style={styles.container}>
         <TouchableOpacity
-          style={styles.customBtnBG}
+          style={[styles.customBtnBG, { backgroundColor }]}
           onPress={onPress}
         >
           <Text style={styles.customBtnText}>{title}</Text>

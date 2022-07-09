@@ -19,33 +19,33 @@ export default AppData = () => {
     };
 
     const buildChapterCompleted = () => {
-        var chapterCompletedBuilder = {
+        const builder = {
             chapter: function(c) {
-                chapterCompletedBuilder.currentChapterId = c;
-                return chapterCompletedBuilder;
+                builder.currentChapterId = c;
+                return builder;
             },
             book: function(b) {
-                chapterCompletedBuilder.currentBookId = b;
-                return chapterCompletedBuilder;
+                builder.currentBookId = b;
+                return builder;
             },
             lastPageCompleted: function(p) {
-                chapterCompletedBuilder.lastPageCompletedId = p;
-                return chapterCompletedBuilder;
+                builder.lastPageCompletedId = p;
+                return builder;
             },
             totalPages: function(total) {
-                chapterCompletedBuilder.totalPagesInChapter = total;
-                return chapterCompletedBuilder;
+                builder.totalPagesInChapter = total;
+                return builder;
             },
             build: function() {
                 return  {
-                    bookId: chapterCompletedBuilder.currentBookId,
-                    chapterId: chapterCompletedBuilder.currentChapterId,
-                    lastPageCompletedId: chapterCompletedBuilder.lastPageCompletedId,
-                    totalPagesInChapter: chapterCompletedBuilder.totalPagesInChapter
+                    bookId: builder.currentBookId,
+                    chapterId: builder.currentChapterId,
+                    lastPageCompletedId: builder.lastPageCompletedId,
+                    totalPagesInChapter: builder.totalPagesInChapter
                 };
             }
         };
-        return chapterCompletedBuilder;
+        return builder;
     };
 
     return  {

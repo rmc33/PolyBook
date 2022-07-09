@@ -16,6 +16,7 @@ import { NativeModules, Button, TouchableOpacity } from 'react-native';
 
 import NavigationButton from '../../components/NavigationButton/NavigationButton';
 import MixedWordPhrase from '../../components/MixedWordPhrase/MixedWordPhrase';
+import AppData from '../../components/AppData/AppData';
 
 const { SqlLiteModule } = NativeModules;
 
@@ -63,6 +64,7 @@ const Story = ({navigation, route}): Node => {
   const [verseLearn, setVerseLearn] = useState('');
   const [verseReference, setVerseReference] = useState('');
   const [order, setOrder] = useState([1,1,1]);
+  const [phraseComplete, setPhraseComplete] = useState(false);
   const selectedLang = route.params.selectedLang;
   const chapters = route.params.chapters;
   const selectedBook = route.params.selectedBook;
@@ -88,14 +90,24 @@ const Story = ({navigation, route}): Node => {
         setVerseLearn(verseOrder.verses[learn]);
         setVerseReference(verseOrder.verses[reference]);
         setOrder(verseOrder.order);
+        setPhraseComplete(false);
     }).catch((error) => {
         console.log('handleGetNextVerse:', error);
     });
   };
 
+  const handlePhraseComplete = () => {
+    setPhraseComplete(true);
+    AppData.updateChaptersCompleted(AppData.buildChapterCompleted()
+      .book(order[0])
+      .chapter(order[1])
+      .verse(order[2])
+    );
+  };
+
   const { height, width } = useWindowDimensions();
   const contentHeight = { height: height - 100};
-  const navContainerHeight = { height: 140 }; //change  height when two buttons are shown
+  const navContainerHeight = { height:  140 }; //change  height when two buttons are shown
 
   return (
     <SafeAreaView style={styles.backgroundStyle}>
@@ -104,12 +116,12 @@ const Story = ({navigation, route}): Node => {
         style={[styles.backgroundStyle]}>
           <View style={[styles.contentContainer]}>
             <ReferenceContainer text={verseReference}/>
-            <MixedWordPhrase text={verseLearn}/>
+            <MixedWordPhrase text={verseLearn} onPhraseComplete={handlePhraseComplete}/>
           </View>
       </ScrollView>
       <View style={[styles.navigationContainer, navContainerHeight]}>
-        <NavigationButton title="Next" onPress={()=>handleGetNextVerse()}/>
-        <NavigationButton title="Back" onPress={()=>navigation.navigate('Choose Book', { selectedLang, chapters } )}/>
+        <NavigationButton title="Next" onPress={()=>handleGetNextVerse()} color={ phraseComplete && "green"}/>
+        <NavigationButton title="Home" onPress={()=>navigation.navigate('Getting Started', { selectedLang, chapters } )}/>
       </View>
     </SafeAreaView>
   );

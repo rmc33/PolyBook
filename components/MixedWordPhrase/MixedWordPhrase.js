@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const MixedWordPhrase = ({text}): Node => {
+const MixedWordPhrase = ({text, onPhraseComplete}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
   const colorStyle = { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter };
   const phrase = parsePhrase(text);
@@ -59,7 +59,7 @@ const MixedWordPhrase = ({text}): Node => {
     setNextWordIndex(0);
   },[text]);
 
-  function handleSelectWord(word, index) {
+  function handleSelectWord(word, index, onPhraseComplete) {
     if (word.value === answerPhrase[nextWordIndex].value) {
       const mixedWord = Object.assign({},mixedPhrase[index], { isCorrect: true });
       mixedPhrase[index] = mixedWord;
@@ -68,6 +68,10 @@ const MixedWordPhrase = ({text}): Node => {
       setMixedPhrase(mixedPhrase);
       setAnswerPhrase(answerPhrase);
       setNextWordIndex(nextWordIndex+1);
+      const hasWordRemaining = mixedPhrase.some(item => !item.isCorrect);
+      if (!hasWordRemaining) {
+        onPhraseComplete();
+      }
     }
   }
 
@@ -75,12 +79,12 @@ const MixedWordPhrase = ({text}): Node => {
     <View style={styles.containerStyle}>
       <AnswerPhrase words={answerPhrase}/>
       <CenteredSpeaker/>
-      <MixedWords words={mixedPhrase} onSelectWord={handleSelectWord}/>
+      <MixedWords words={mixedPhrase} onSelectWord={handleSelectWord} onPhraseComplete={onPhraseComplete}/>
     </View>
   );
 };
 
-const MixedWords = ({words, onSelectWord}) => {
+const MixedWords = ({words, onSelectWord, onPhraseComplete}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const colorStyle = {
     color: isDarkMode ? Colors.lighter : Colors.darker
@@ -89,7 +93,7 @@ const MixedWords = ({words, onSelectWord}) => {
     <View style={styles.mixedWords}>
         { words.map((word,index) => {
             return (
-              <TouchableOpacity key={`to_${index}`} style={styles.wordContainer} onPress={() => onSelectWord(word,index)}>
+              <TouchableOpacity key={`to_${index}`} style={styles.wordContainer} onPress={() => onSelectWord(word,index,onPhraseComplete)}>
                   {!word.isCorrect && <Text key={`t_${index}`} style={[styles.word, colorStyle]}>{word.value}</Text> }
               </TouchableOpacity>
             );
