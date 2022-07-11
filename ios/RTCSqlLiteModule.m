@@ -96,7 +96,7 @@ RCT_EXPORT_METHOD(getChapters:(NSString*) langCode
     reject(@"db error", @"Error opening database", nil);
   }
  
-  NSString *sql = [NSString stringWithFormat:@"select b.name, b.number from book b, bible bb where bb.lang = '%@' and b.bible_id = bb.id", langCode];
+  NSString *sql = [NSString stringWithFormat:@"select b.name, b.number, count(v.id) as totalPages from book b, bible bb, verse v, chapter c where bb.lang = '%@' and b.bible_id = bb.id and c.book_id = b.id and v.chapter_id = c.id group by b.number", langCode];
   sqlite3_stmt *stmt = NULL;
   
   RCTLogInfo(@"Running a query %s", [sql UTF8String]);
@@ -113,6 +113,7 @@ RCT_EXPORT_METHOD(getChapters:(NSString*) langCode
     NSMutableArray* chapterInfo = [[NSMutableArray alloc] init];
     [chapterInfo addObject:[[NSString alloc] initWithUTF8String: (char*) sqlite3_column_text(stmt, 0)]];
     [chapterInfo addObject:[NSNumber numberWithInt: (int) sqlite3_column_int(stmt, 1)]];
+    [chapterInfo addObject:[NSNumber numberWithInt: (int) sqlite3_column_int(stmt, 2)]];
     [chapters addObject: chapterInfo];
     row_count++;
   }

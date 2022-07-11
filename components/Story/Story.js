@@ -87,10 +87,16 @@ const Story = ({navigation, route}): Node => {
 
   const handleGetNextVerse = () => {
     getNextVerseOrder(learn, reference, order).then((verseOrder) => {
-        setVerseLearn(verseOrder.verses[learn]);
-        setVerseReference(verseOrder.verses[reference]);
-        setOrder(verseOrder.order);
-        setPhraseComplete(false);
+        if (verseOrder) {
+          setVerseLearn(verseOrder.verses[learn]);
+          setVerseReference(verseOrder.verses[reference]);
+          setOrder(verseOrder.order);
+          setPhraseComplete(false);
+        }
+        else {
+          //chapter completed
+          navigation.navigate('Choose Book', { selectedLang, chapters });
+        }
     }).catch((error) => {
         console.log('handleGetNextVerse:', error);
     });
@@ -98,11 +104,11 @@ const Story = ({navigation, route}): Node => {
 
   const handlePhraseComplete = () => {
     setPhraseComplete(true);
-    AppData.updateChaptersCompleted(AppData.buildChapterCompleted()
-      .book(order[0])
-      .chapter(order[1])
-      .verse(order[2])
-    );
+    AppData.updateChapterCompleted({
+      bookId: order[0],
+      chapterId: order[1],
+      lastPageCompletedId: order[2]
+    });
   };
 
   const { height, width } = useWindowDimensions();
@@ -143,8 +149,7 @@ const getNextVerseOrder = async(langCodeLearn, langCodeRef, order) => {
         verseNumber = order[2];
     const nextVerseOrders = [
         [bookNumber, chapterNumber, verseNumber+1],
-        [bookNumber, chapterNumber+1, 1],
-        [bookNumber+1, 1, 1]
+        [bookNumber, chapterNumber+1, 1]
     ];
     for (let o of nextVerseOrders) {
         verses = await getVerses(langCodeLearn, langCodeRef, o);

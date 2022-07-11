@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     }
   });
 
-  const Item = ({ title, onSelect }): Node => {
+  const Item = ({ title, onSelect, totalPages }): Node => {
     const isDarkMode = useColorScheme() === 'dark';
     return (
       <TouchableOpacity style={styles.item} onPress={() => onSelect(title)}>
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
               color: isDarkMode ? Colors.white : Colors.black,
             },
           ]}>
-          {title}
+          {title} ({totalPages})
         </Text>
       </TouchableOpacity>
     );
@@ -64,7 +64,7 @@ const ChapterPicker  = ({navigation, route}): Node => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     height: '100%'
   };
-  const chapterProgress = route.params.chapterProgress || {};
+  const chapterProgress = route.params.chapterProgress;
   const chapters = route.params.chapters;
   let selectedBook = {};
   const onBookSelected = (book) => {
@@ -78,7 +78,7 @@ const ChapterPicker  = ({navigation, route}): Node => {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
             { chapters.map((c) => {
-              return <Item key={c} title={c[0]} progress={chapterProgress[c[1]]} onSelect={() => onBookSelected(c)}/>
+              return <Item key={c} title={c[0]} totalPages={c[2]} progress={chapterProgress} onSelect={() => onBookSelected(c)}/>
             })}
         </ScrollView>
         <View style={styles.navigationContainer}>
