@@ -1,22 +1,14 @@
 
 import { NativeModules } from 'react-native';
 const { AppDataModule } = NativeModules;
+const allChaptersCompleted = {};
 
-export default AppData = () => {
-
-    const allChaptersCompleted = {};
-
-    const updateChapterCompleted = (chapterCompleted) => {
-        const { bookId, chapterId, lastPageCompletedId } = chapterCompleted;
-        const book = allChaptersCompleted[bookId] || {};
-        book[chapterId] = {
-            lastPageCompletedId
-        };
-        allChaptersCompleted[bookId] = book;
-        AppDataModule.updateChaptersCompleted(JSON.stringify(allChaptersCompleted));
+export const updateChapterCompleted = (chapterCompleted) => {
+    const { bookId, chapterId, lastPageCompletedId } = chapterCompleted;
+    const book = allChaptersCompleted[bookId] || {};
+    book[chapterId] = {
+        lastPageCompletedId
     };
-
-    return  {
-        updateChapterCompleted
-    };
-}
+    allChaptersCompleted[bookId] = book;
+    AppDataModule.updateChaptersCompleted(JSON.stringify(allChaptersCompleted));
+};

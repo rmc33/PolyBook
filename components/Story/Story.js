@@ -16,7 +16,7 @@ import { NativeModules, Button, TouchableOpacity } from 'react-native';
 
 import NavigationButton from '../../components/NavigationButton/NavigationButton';
 import MixedWordPhrase from '../../components/MixedWordPhrase/MixedWordPhrase';
-import AppData from '../../components/AppData/AppData';
+import { updateChapterCompleted } from '../../components/AppData/AppData';
 
 const { SqlLiteModule } = NativeModules;
 
@@ -104,7 +104,7 @@ const Story = ({navigation, route}): Node => {
 
   const handlePhraseComplete = () => {
     setPhraseComplete(true);
-    AppData.updateChapterCompleted({
+    updateChapterCompleted({
       bookId: order[0],
       chapterId: order[1],
       lastPageCompletedId: order[2]
