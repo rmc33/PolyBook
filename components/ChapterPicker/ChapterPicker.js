@@ -64,7 +64,7 @@ const ChapterPicker  = ({navigation, route}): Node => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     height: '100%'
   };
-  const chapterProgress = route.params.chapterProgress;
+  const chapterProgress = route.params.chapterProgress || {};
   const chapters = route.params.chapters;
   let selectedBook = {};
   const onBookSelected = (book) => {

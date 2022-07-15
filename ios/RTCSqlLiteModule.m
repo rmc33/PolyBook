@@ -31,7 +31,7 @@ RCT_EXPORT_METHOD(getVersesByOrder:(NSString*) langCodeLearn
     reject(@"db error", @"Error opening database", nil);
   }
   
-  NSString *sql = [NSString stringWithFormat:@"select v.text, bb.lang from verse v, chapter c, book b, bible bb where bb.lang in ('%@','%@') and b.bible_id = bb.id and c.book_id = b.id and v.chapter_id = c.id and v.number=%ld and c.number=%ld and b.number=%ld", langCodeLearn, langCodeReference, verseNumber, chapterNumber, bookNumber];
+  NSString *sql = [NSString stringWithFormat:@"select v.text, bb.lang, v.id from verse v, chapter c, book b, bible bb where bb.lang in ('%@','%@') and b.bible_id = bb.id and c.book_id = b.id and v.chapter_id = c.id and v.number=%ld and c.number=%ld and b.number=%ld", langCodeLearn, langCodeReference, verseNumber, chapterNumber, bookNumber];
   
   sqlite3_stmt *stmt = NULL;
   
@@ -46,9 +46,11 @@ RCT_EXPORT_METHOD(getVersesByOrder:(NSString*) langCodeLearn
   NSMutableDictionary *verses = [[NSMutableDictionary alloc] init];
   int row_count = 0;
   while (sqlite3_step(stmt) == SQLITE_ROW) {
-    NSString *value = [[NSString alloc] initWithUTF8String: (char*) sqlite3_column_text(stmt, 0)];
-    NSString *key = [[NSString alloc] initWithUTF8String: (char*) sqlite3_column_text(stmt, 1)];
-    [verses setValue:value forKey:key];
+    NSString *text = [[NSString alloc] initWithUTF8String: (char*) sqlite3_column_text(stmt, 0)];
+    NSString *lang = [[NSString alloc] initWithUTF8String: (char*) sqlite3_column_text(stmt, 1)];
+    NSNumber *verseId = [NSNumber numberWithInt: (int) sqlite3_column_int(stmt, 2)];
+    [verses setValue:text forKey:lang];
+    [verses setValue:verseId forKey:@"verseId"];
     row_count++;
   }
   

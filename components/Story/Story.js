@@ -64,6 +64,7 @@ const Story = ({navigation, route}): Node => {
   const [verseLearn, setVerseLearn] = useState('');
   const [verseReference, setVerseReference] = useState('');
   const [order, setOrder] = useState([1,1,1]);
+  const [verseId, setVerseId] = useState(0);
   const [phraseComplete, setPhraseComplete] = useState(false);
   const selectedLang = route.params.selectedLang;
   const chapters = route.params.chapters;
@@ -80,6 +81,7 @@ const Story = ({navigation, route}): Node => {
       getVerses(learn, reference, selectedStartOrder).then((verses) => {
         setVerseReference(verses[reference]);
         setVerseLearn(verses[learn]);
+        setVerseId(verses.verseId);
         setOrder(selectedStartOrder);
       });
     }
@@ -90,11 +92,12 @@ const Story = ({navigation, route}): Node => {
         if (verseOrder) {
           setVerseLearn(verseOrder.verses[learn]);
           setVerseReference(verseOrder.verses[reference]);
+          setVerseId(verseOrder.verses.verseId);
           setOrder(verseOrder.order);
           setPhraseComplete(false);
         }
         else {
-          //chapter completed
+          //end of chapter
           navigation.navigate('Choose Book', { selectedLang, chapters });
         }
     }).catch((error) => {
@@ -106,8 +109,8 @@ const Story = ({navigation, route}): Node => {
     setPhraseComplete(true);
     updateChapterCompleted({
       bookId: order[0],
-      chapterId: order[1],
-      lastPageCompletedId: order[2]
+      chapterNumber: order[1],
+      lastPageNumber: order[2]
     });
   };
 
@@ -121,6 +124,7 @@ const Story = ({navigation, route}): Node => {
         contentInsetAdjustmentBehavior="automatic"
         style={[styles.backgroundStyle]}>
           <View style={[styles.contentContainer]}>
+            <Text>{JSON.stringify(order)}-{verseId}</Text>
             <ReferenceContainer text={verseReference}/>
             <MixedWordPhrase text={verseLearn} onPhraseComplete={handlePhraseComplete}/>
           </View>

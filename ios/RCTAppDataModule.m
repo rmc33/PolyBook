@@ -31,7 +31,15 @@ RCT_EXPORT_METHOD(updateChaptersCompleted:(NSString*) chaptersCompletedJSON
     rejecter:(RCTPromiseRejectBlock)reject)
 {
   [chaptersCompletedJSON writeToFile:appFileChaptersCompleted atomically:YES encoding:NSUTF8StringEncoding error:nil];
-  resolve(@"done");
+  resolve(nil);
 }
+
+RCT_EXPORT_METHOD(readChaptersCompleted:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+  NSString *content = [NSString stringWithContentsOfFile:appFileChaptersCompleted encoding:NSUTF8StringEncoding error:nil];
+  resolve(content);
+}
+
 
 @end

@@ -16,6 +16,7 @@ import { NativeModules, Button, TouchableOpacity } from 'react-native';
 import LanguagePicker from '../../components/LanguagePicker/LanguagePicker';
 import SelectedLanguage from '../../components/SelectedLanguage/SelectedLanguage';
 import NavigationButton from '../../components/NavigationButton/NavigationButton';
+import { readChaptersCompleted } from '../../components/AppData/AppData';
 
 const { SqlLiteModule } = NativeModules;
 
@@ -103,7 +104,8 @@ const Home = ({navigation}): Node => {
     const fetchData = async () => {
       try {
         const chapters = await SqlLiteModule.getChapters(selectedLang.reference);
-        const chapterProgress = 0;
+        const chapterProgress = await readChaptersCompleted();
+        console.log('chapterProgress=', chapterProgress);
         navigation.navigate('Choose Book', { selectedLang, chapters, chapterProgress });
       }
       catch(e) {
